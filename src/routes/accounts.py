@@ -136,7 +136,7 @@ async def register_user(
         ) from e
     else:
 
-        url = URL_ACCOUNTS + "activate/"
+        url = f"{URL_ACCOUNTS}activate/?token={activation_token.token}"
         background_tasks.add_task(
             email_notification.send_activation_email, str(new_user.email), url
         )
@@ -290,7 +290,7 @@ async def request_password_reset_token(
     reset_token = PasswordResetTokenModel(user_id=cast(int, user.id))
     db.add(reset_token)
     await db.commit()
-    url = URL_ACCOUNTS + "reset-password/complete/"
+    url = f"{URL_ACCOUNTS}reset-password/complete/?token={reset_token.token}"
     background_tasks.add_task(
         email_notification.send_password_reset_email, str(user.email), url
     )
